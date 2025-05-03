@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+
+    <!--- basic page needs
+    ================================================== -->
+    <meta charset="utf-8">
+    <title>Count - Static</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- mobile specific metas
+    ================================================== -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSS
+    ================================================== -->
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/vendor.css">
+    <link rel="stylesheet" href="css/main.css">
+
+    <!-- script
+    ================================================== -->
+    <script src="js/modernizr.js"></script>
+    <script src="js/pace.min.js"></script>
+
+    <!-- favicons
+    ================================================== -->
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+</head>
+
+<body>
+
+    <!-- home
+    ================================================== -->
+    <main class="s-home s-home--static">
+
+        <div class="overlay"></div>
+
+        <div class="home-content">
+
+            <div class="home-logo">
+              
+            </div>
+
+            <div class="row home-content__main">
+
+                <div class="col-eight home-content__text pull-right">
+                    <h3>hataro</h3>
+
+                    <h1>
+                    C++ Full-stack junior developer. <br>
+                    Пишу скрипты, софты. <br> Минимальный заказ от 15$.
+                    </h1>
+
+                    <p>
+                   Не работаю без четкого ТЗ.
+                    </p>
+
+                   
+                </div>  <!-- end home-content__text -->
+
+
+
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // 1) Конфигурация — задержки (ms) перед стартом набора каждого тега и скорость (ms) между символами
+  const config = {
+    h3: { delayBefore: 300, typingSpeed: 50 },
+    h1: { delayBefore: 10, typingSpeed: 10 },
+    p:  { delayBefore: 10, typingSpeed: 10 }
+  };
+
+  // 2) Сохраняем элементы и их исходный контент
+  const elems = {
+    h3: document.querySelector('.home-content__text h3'),
+    h1: document.querySelector('.home-content__text h1'),
+    p:  document.querySelector('.home-content__text p')
+  };
+  const originals = {};
+  for (let key in elems) {
+    originals[key] = Array.from(elems[key].childNodes); // сохраняем смешанные текстовые и <br> узлы
+    elems[key].innerHTML = '';                           // очищаем перед набором
+  }
+
+  // 3) Утилита паузы
+  function wait(ms) {
+    return new Promise(res => setTimeout(res, ms));
+  }
+
+  // 4) Функция набора смешанного HTML (текстовых узлов + <br>)
+  function typeHTML(element, nodes, speed) {
+    return new Promise(resolve => {
+      let idxNode = 0;
+
+      function processNode() {
+        if (idxNode >= nodes.length) {
+          resolve();
+          return;
+        }
+        const node = nodes[idxNode++];
+
+        if (node.nodeType === Node.TEXT_NODE) {
+          const text = node.textContent;
+          let i = 0;
+          (function typeChar() {
+            if (i < text.length) {
+              element.append(text[i++]);
+              setTimeout(typeChar, speed);
+            } else {
+              processNode();
+            }
+          })();
+        } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'BR') {
+          element.appendChild(document.createElement('br'));
+          processNode();
+        } else {
+          // на случай других тегов - клонируем сразу
+          element.appendChild(node.cloneNode(true));
+          processNode();
+        }
+      }
+
+      processNode();
+    });
+  }
+
+  // 5) Последовательный запуск для h3 → h1 → p
+  (async function run() {
+    await wait(config.h3.delayBefore);
+    await typeHTML(elems.h3, originals.h3, config.h3.typingSpeed);
+
+    await wait(config.h1.delayBefore);
+    await typeHTML(elems.h1, originals.h1, config.h1.typingSpeed);
+
+    await wait(config.p.delayBefore);
+    await typeHTML(elems.p, originals.p, config.p.typingSpeed);
+  })();
+});
+</script>
+
+
+
+
+
+                <div class="col-four home-content__counter">
+                    
+<!-- Обёртка с перспективой -->
+<div class="parallax-container" style="perspective: 800px;">
+  <img src="images/cpp.png"
+       class="parallax-img"
+       alt="cpp"
+       style="border-radius: 10px; display: block;">
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // ========== 1) Конфиг – настраиваем здесь ==========
+  const config = {
+    maxTiltX: 15,        // макс. угол по оси X (в градусах)
+    maxTiltY: 15,        // макс. угол по оси Y
+    speedX: 0.0015,      // скорость смены угла по X
+    speedY: 0.0012       // скорость смены угла по Y
+  };
+
+  // ========== 2) Получаем элемент ==========
+  const img = document.querySelector('.parallax-img');
+
+  // убедимся, что включено «3D» преобразование
+  img.style.transformStyle = 'preserve-3d';
+  img.style.willChange = 'transform';
+
+  // ========== 3) Анимация ==========
+  let start = null;
+  function animateFrame(timestamp) {
+    if (!start) start = timestamp;
+    const t = timestamp - start;
+
+    // вычисляем текущие углы через синус/косинус
+    const tiltX = Math.sin(t * config.speedX) * config.maxTiltX;
+    const tiltY = Math.cos(t * config.speedY) * config.maxTiltY;
+
+    // применяем трансформ с перспективой (ее задаёт контейнер)
+    img.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+
+    requestAnimationFrame(animateFrame);
+  }
+  requestAnimationFrame(animateFrame);
+});
+</script>
+
+                    
+
+
+                </div>  <!-- end home-content__counter -->
+
+            </div>  <!-- end home-content__main -->
+
+            <ul class="home-social">
+                <li>
+                <a href="https://t.me/hatar0" target="_blank" rel="noopener noreferrer"><i class="fab fa-telegram" aria-hidden="true"></i><span>Telegram</span></a>
+                </li>
+                <li>
+                <a href="https://vk.com/hatar0" target="_blank" rel="noopener noreferrer"><i class="fab fa-vk" aria-hidden="true"></i><span>VK</span></a>
+                </li>
+                 <li>
+                <a href="https://www.youtube.com/@hatarot" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube" aria-hidden="true"></i><span>Youtube</span></a>
+                </li>
+                <li>
+                <a href="https://github.com/hatar0" target="_blank" rel="noopener noreferrer"><i class="fab fa-github" aria-hidden="true"></i><span>Github</span></a>
+                </li>
+                <li>
+               
+                </li>
+            </ul> <!-- end home-social -->
+
+            <div class="row home-copyright">
+                <span>Copyright  2025</span> 
+                <span>Design by HypeAI</a></span>
+            </div> <!-- end home-copyright -->
+
+            <div class="home-content__line"></div>
+
+        </div> <!-- end home-content -->
+
+    </main> <!-- end s-home -->
+
+    <!-- info
+    ================================================== -->
+   
+
+    
+
+    <!-- preloader
+    ================================================== -->
+    <div id="preloader">
+        <div id="loader">
+            <div class="line-scale-pulse-out">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Java Script
+    ================================================== -->
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/plugins.js"></script>
+    <script src="js/main.js"></script>
+
+</body>
+
+</html>
