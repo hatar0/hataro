@@ -1855,7 +1855,11 @@ html.no-csstransitions .home-content__main {
   }
 
   .home-social {
-    display: none;
+          position: fixed;
+        background-color: #111111bf;
+        border-radius: 10px;
+        top: 380px;
+        bottom: 178px;
   }
 
 }
